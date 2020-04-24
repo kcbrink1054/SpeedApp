@@ -4,6 +4,7 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
+import RouteHistoryScreen from '../screens/RouteHistoryScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -24,14 +25,26 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
+
       <BottomTab.Screen
+        name="RouteHistory"
+        component={RouteHistoryScreen}
+        
+        options={{
+          title: 'Route History',
+          tabBarIcon: ({focused}) => <TabBarIcon focused={focused} name="md-book"/>
+        }}
+      />
+
+      
+      {/* <BottomTab.Screen
         name="Links"
         component={LinksScreen}
         options={{
           title: 'Resources',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
         }}
-      />
+      /> */}
     </BottomTab.Navigator>
   );
 }
@@ -42,7 +55,7 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Home':
       return 'How to get started';
-    case 'Links':
+    case 'RouteHistory':
       return 'Links to learn more';
   }
 }

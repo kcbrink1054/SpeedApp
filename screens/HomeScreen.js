@@ -7,13 +7,14 @@ import GraphComponent from "../components/GraphComponent";
 import { MonoText } from '../components/StyledText';
 
 export default function HomeScreen() {
+  let x = "test"
   return (
     <View style={styles.container}>
       <View style={styles.twoFlexContainer}>
         <GraphComponent/>
       </View>
       <View style={styles.oneFlexContainer}>
-        <TouchableOpacity onPress={HelloButtonPressed}>
+        <TouchableOpacity onPress={()=>HelloButtonPressed(x)}>
           <Text style={{backgroundColor:'white', textAlign:'center',padding:15,fontSize:25, margin:30}}>
             START
           </Text>
@@ -27,8 +28,8 @@ HomeScreen.navigationOptions = {
   header: null,
 };
 
-function HelloButtonPressed(){
-  Alert.alert("This is my first alert test")
+function HelloButtonPressed(id){
+  Alert.alert(id)
 }
 function DevelopmentModeNotice() {
   if (__DEV__) {
