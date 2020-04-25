@@ -6,7 +6,9 @@ import { ListItem } from "react-native-elements";
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
 
-export default function RouteDetailsScreen(){
+export default function RouteDetailsScreen({route, navigation}){
+    const { id } = route.params
+    Alert.alert(JSON.stringify(id))
     return(
         <View>
             <Text>

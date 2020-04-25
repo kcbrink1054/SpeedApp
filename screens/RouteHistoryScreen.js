@@ -6,7 +6,7 @@ import { ListItem } from "react-native-elements";
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
 export default function RouteHistoryScreen({navigation}){
-    let obj = ["1","2","3","4","5"]
+    let obj = [1,2,3,4,5]
     let t = 1
     return(
         <ScrollView>
@@ -18,7 +18,7 @@ export default function RouteHistoryScreen({navigation}){
                         subtitle={x}
                         bottomDivider
                         // onPress={()=>RowPressed(x)}
-                        onPress={()=>navigation.navigate("RouteDetails")}
+                        onPress={()=>navigation.navigate("RouteDetails",{id:x})}
                     />
     ))
             }
