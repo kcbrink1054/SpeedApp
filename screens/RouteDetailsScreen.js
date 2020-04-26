@@ -7,12 +7,12 @@ import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
 
 export default function RouteDetailsScreen({route, navigation}){
-    const { id } = route.params
-    Alert.alert(JSON.stringify(id))
+    const { results } = route.params
+    // Alert.alert(JSON.stringify(id))
     return(
         <View>
             <Text>
-                Hello World
+                {JSON.stringify(results)}
             </Text>
         </View>
     )

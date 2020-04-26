@@ -1,33 +1,71 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
+import  React, {useState} from 'react';
+import { StyleSheet, Alert } from 'react-native';
 import { ListItem } from "react-native-elements";
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import { openDatabase } from "expo-sqlite";
 
 export default function RouteHistoryScreen({navigation}){
-    let obj = [1,2,3,4,5]
-    let t = 1
+    const [results,setResults] = useState([])
+
+    GetRouteHistory(setResults)
+
     return(
         <ScrollView>
             {
-                obj.map((x,i)=>(
+                results.map((x,i)=>(
                     <ListItem
-                        key={x}
-                        title="test"
-                        subtitle={x}
+                        key={x.id}
+                        title={x.name}
+                        subtitle={x.age}
                         bottomDivider
-                        // onPress={()=>RowPressed(x)}
-                        onPress={()=>navigation.navigate("RouteDetails",{id:x})}
+                        onPress={()=>DisplayRouteDetails(x, navigation)}
                     />
     ))
             }
         </ScrollView>
-            
     )
 }
-function RowPressed(id){
-    Alert.alert(id)
+
+function GetRouteHistory(callback){
+    const db = openDatabase("test1")
+
+    db.transaction(x =>{
+        x.executeSql(
+            "SELECT * from FirstTable",
+            [],
+            (_, {rows: {_array} })=>callback(_array),
+            () => Alert.alert("error")
+        )
+    })
+}
+function DisplayRouteDetails(data, navigation){
+    navigation.navigate("RouteDetails", {results: data})
+}
+
+
+function CreateDatabase(){
+    const db = openDatabase("test1")
+    
+    db.transaction(x =>{
+        x.executeSql(
+            "CREATE TABLE if not exists FirstTable (id integer primary key not null,name text, age int);",
+            []
+        );
+        // x.executeSql(
+        //     "INSERT INTO FirstTable (name, age) values (?,?)",
+        //     ['Ken Ken', 40]
+
+        // );
+        x.executeSql(
+            "SELECT * from FirstTable where name = ?",
+            ["Kalan Brinkley"],
+            (_, {rows: {_array} })=>DisplayData(_array),
+            () => Alert.alert("error")
+        )
+    })
+
 }
 const styles = StyleSheet.create({
     container:{
