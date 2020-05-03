@@ -5,32 +5,99 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import GraphComponent from "../components/GraphComponent";
 import { MonoText } from '../components/StyledText';
+import {GetAlert} from "../services/DbService";
+import { SaveChanges } from "../services/DbService";
 
-export default function HomeScreen() {
-  let x = "test"
-  return (
-    <View style={styles.container}>
-      <View style={styles.twoFlexContainer}>
-        <GraphComponent/>
+export default class HomeScreen extends React.Component {
+  constructor(){
+    super()
+    SaveChanges({date:new Date().getDay()})
+    const defaultValues = [
+      { x: 0, y: 10 },
+      { x: 1, y: 40 },
+      { x: 2, y: 20 },
+      { x: 3, y: 30 },
+      { x: 4, y: 10 }
+  ]
+    
+    this.state = {
+      dataStorage: defaultValues,
+      trackingData: defaultValues,
+      startTracking: false,
+      intervalId: 0,
+      startDateTime:"",
+      endDateTime:""
+    }
+
+  // setInterval(()=>{
+  //     this.setState(state => {
+  //         const data = [...state.data, {x: (state.data.length + 1), y: state.data[state.data.length-1].y+10}]
+  //         return {
+  //             data
+  //         }
+  //     })
+  // }, 25)
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <View style={styles.twoFlexContainer}><Text>
+          {JSON.stringify(this.state.trackingData)}
+        </Text>
+          <GraphComponent data={this.state.trackingData}/>
+        </View>
+        <View style={styles.oneFlexContainer}>
+          <TouchableOpacity onPress={()=>this.StartTrackingSpeed()}>
+            <Text style={{backgroundColor:'white', textAlign:'center',padding:15,fontSize:25, margin:30}}>
+              {!this.state.startTracking ? "START" : "STOP"}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.oneFlexContainer}>
-        <TouchableOpacity onPress={()=>HelloButtonPressed(x)}>
-          <Text style={{backgroundColor:'white', textAlign:'center',padding:15,fontSize:25, margin:30}}>
-            START
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    );
+  }
+  GetAccelerometerData(){
+    return  {x: (this.state.dataStorage.length + 1), y: this.state.dataStorage[Math.floor(Math.random() * this.state.dataStorage.length)].y}
+  }
+  StartTrackingSpeed(){
+    if (!this.state.startTracking) {
+      const intervalId = setInterval(()=>{
+        this.setState(state => {
+            const dataStorage = [...state.dataStorage, this.GetAccelerometerData()]
+            return {
+              dataStorage,
+              trackingData: state.dataStorage.slice(-5)
+            }
+        })
+      }, 1000)
+      this.setState(state=>{
+        return{
+          intervalId,
+          startTracking: !state.startTracking,
+          startDateTime: new Date().getDate()
+          
+        }
+      })
+    } else{
+      clearInterval(this.state.intervalId)
+      this.setState(state=>{
+        return{
+          intervalId: 0,
+          startTracking: !state.startTracking
+        }
+      })
+      //TODO Save the route to the database
+    }
+  
+  }
+
 }
 
 HomeScreen.navigationOptions = {
   header: null,
 };
 
-function HelloButtonPressed(id){
-  Alert.alert(id)
-}
+
 function DevelopmentModeNotice() {
   if (__DEV__) {
     const learnMoreButton = (
@@ -67,7 +134,7 @@ function handleHelpPress() {
 const styles = StyleSheet.create({
   twoFlexContainer:{
     flex:2,
-    backgroundColor:'#6e6d6a',
+    // backgroundColor:'#6e6d6a',
     justifyContent:'center'
   },
   oneFlexContainer:{
@@ -166,3 +233,4 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
 });
+``

@@ -8,6 +8,7 @@ import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
 export default function RouteDetailsScreen({route, navigation}){
     const { results } = route.params
+    navigation.setOptions({headerBackTitle:"Back", headerTitle:"Route Details"})
     // Alert.alert(JSON.stringify(id))
     return(
         <View>

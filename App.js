@@ -9,6 +9,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 import RouteDetailsScreen from './screens/RouteDetailsScreen';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+Icon.loadFont();
 
 const Stack = createStackNavigator();
 
@@ -31,6 +34,7 @@ export default function App(props) {
         await Font.loadAsync({
           ...Ionicons.font,
           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+          'Roboto': require('./assets/fonts/Roboto-Regular.ttf')
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

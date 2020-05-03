@@ -1,21 +1,35 @@
 import * as React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
+import { VictoryBar, VictoryChart, VictoryLine,  VictoryTheme } from "victory-native";
 
 
-export default class GraphComponent extends React.Component{
 
-    render(){
-        return(
-            <Text style={style.graphContainer}>
-                This will be my graph content
-            </Text>
-        )
-    }
-    
+export default function GraphComponent(props){
+
+    return(
+        <View style={style.graphContainer}>
+            <VictoryChart width={400} height={400} theme={VictoryTheme.grayscale}
+              animate={{duration:1000}}
+            >
+                <VictoryLine
+                    style={{
+                        data: { stroke: "green"},
+                        parent: { border: "20px solid #ccc"}
+                    }}
+                    data= {props.data}
+                    interpolation="natural"
+                />
+                {/* <VictoryBar data={data} x="quarter" y="earnings" /> */}
+            </VictoryChart>
+        </View>
+        
+    )
 }
 const style = StyleSheet.create({
     graphContainer:{
-        textAlign:'center',
-        color:'white'
+        flex:1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white"
     }
 })

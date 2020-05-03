@@ -32,7 +32,8 @@ export default function BottomTabNavigator({ navigation, route }) {
         
         options={{
           title: 'Route History',
-          tabBarIcon: ({focused}) => <TabBarIcon focused={focused} name="md-book"/>
+          tabBarIcon: ({focused}) => <TabBarIcon focused={focused} name="md-book"/>,
+          
         }}
       />
 
@@ -51,11 +52,14 @@ export default function BottomTabNavigator({ navigation, route }) {
 
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
+  return 'SpeedApp';
   switch (routeName) {
+    
     case 'Home':
-      return 'How to get started';
+      return 'SpeedApp';
     case 'RouteHistory':
-      return 'Links to learn more';
+      return 'Route History';
+      case 'RouteDetails':
+        return 'Route Details';
   }
 }
