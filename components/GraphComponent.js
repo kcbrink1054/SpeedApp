@@ -8,7 +8,7 @@ export default function GraphComponent(props){
 
     return(
         <View style={style.graphContainer}>
-            <VictoryChart width={400} height={400} theme={VictoryTheme.grayscale}
+            <VictoryChart width={350} height={300} theme={VictoryTheme.grayscale}
               animate={{duration:1000}}
             >
                 <VictoryLine

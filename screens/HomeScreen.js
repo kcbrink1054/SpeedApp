@@ -7,28 +7,35 @@ import GraphComponent from "../components/GraphComponent";
 import { MonoText } from '../components/StyledText';
 import {GetAlert} from "../services/DbService";
 import { SaveChanges } from "../services/DbService";
+import moment from "moment";
+import { INITIAL_DATA } from "../data";
 
 export default class HomeScreen extends React.Component {
   constructor(){
     super()
-    SaveChanges({date:new Date().getDay()})
-    const defaultValues = [
-      { x: 0, y: 10 },
-      { x: 1, y: 40 },
-      { x: 2, y: 20 },
-      { x: 3, y: 30 },
-      { x: 4, y: 10 }
-  ]
+    // SaveChanges(moment())
+    let x = GetCurrentDate()
+    let y = GetCurrentTime()
+  //   const defaultValues = [
+  //     { x: 0, y: 10 },
+  //     { x: 1, y: 20 }
+  // ]
     
     this.state = {
-      dataStorage: defaultValues,
-      trackingData: defaultValues,
+      routeDetails: INITIAL_DATA,
+      // trackingData: defaultValues,
       startTracking: false,
       intervalId: 0,
       startDateTime:"",
-      endDateTime:""
+      endDateTime:"",
+      count:0,
+      minSpeed:0,
+      maxspeed:0,
+      showGraph:false
     }
 
+    // let x = moment().format('LLLL')
+    // Alert.alert(JSON.stringify(this.state.routeDetails.length))
   // setInterval(()=>{
   //     this.setState(state => {
   //         const data = [...state.data, {x: (state.data.length + 1), y: state.data[state.data.length-1].y+10}]
@@ -42,11 +49,11 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.twoFlexContainer}><Text>
-          {JSON.stringify(this.state.trackingData)}
+          {JSON.stringify(GetLatestRouteData(this.state.routeDetails))}
         </Text>
-          <GraphComponent data={this.state.trackingData}/>
+          <GraphComponent data={GetLatestRouteData(this.state.routeDetails)}/>
         </View>
-        <View style={styles.oneFlexContainer}>
+        <View style={styles.oneFlexContainer}> 
           <TouchableOpacity onPress={()=>this.StartTrackingSpeed()}>
             <Text style={{backgroundColor:'white', textAlign:'center',padding:15,fontSize:25, margin:30}}>
               {!this.state.startTracking ? "START" : "STOP"}
@@ -56,25 +63,22 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
-  GetAccelerometerData(){
-    return  {x: (this.state.dataStorage.length + 1), y: this.state.dataStorage[Math.floor(Math.random() * this.state.dataStorage.length)].y}
-  }
+  
   StartTrackingSpeed(){
     if (!this.state.startTracking) {
       const intervalId = setInterval(()=>{
         this.setState(state => {
-            const dataStorage = [...state.dataStorage, this.GetAccelerometerData()]
+            const routeDetails = [...state.routeDetails, MapRouteDetails(state.routeDetails[state.routeDetails.length-1].time,state.routeDetails[state.routeDetails.length-1].mph)]
             return {
-              dataStorage,
-              trackingData: state.dataStorage.slice(-5)
+              routeDetails              
             }
         })
-      }, 1000)
+      }, 500)
       this.setState(state=>{
         return{
           intervalId,
           startTracking: !state.startTracking,
-          startDateTime: new Date().getDate()
+          startDateTime: GetCurrentDate()
           
         }
       })
@@ -97,6 +101,48 @@ HomeScreen.navigationOptions = {
   header: null,
 };
 
+function GetAccelerometerData(){
+  return  50
+}
+function MapRouteDetails(time, mph){
+  return {
+    mph: (mph % 10) ? mph - 1 : mph+3,
+    time: time + 1,
+    lat: GetLat(),
+    long: GetLong(),
+    routeId: 1,
+    currentMile: GetCurrentMile()
+
+  }
+}
+
+function GetLat(){
+  return 0
+}
+function GetLong(){
+  return 0
+}
+function GetCurrentMile(){
+  return 0
+}
+
+function GetLatestRouteData(data){
+  return data.slice(-5).map(d=> {
+    return(
+      {
+        x: d.time,
+        y: d.mph
+      }
+    )
+  })
+}
+function GetCurrentDate(){
+  return moment().format("MMM Do YY")
+}
+
+function GetCurrentTime(){
+  return moment().format("LTS")
+}
 
 function DevelopmentModeNotice() {
   if (__DEV__) {
