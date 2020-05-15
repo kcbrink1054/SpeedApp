@@ -5,21 +5,24 @@ import { StyleSheet, Alert } from 'react-native';
 import { ListItem } from "react-native-elements";
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import { openDatabase } from "expo-sqlite";
-import { GetRouteHistory } from "../services/DbService";
+import { GetRouteHistory, GetRouteDetailsById } from "../services/storage";
 
 export default function RouteHistoryScreen({navigation}){
-    const [results,setResults] = useState([])
+    const [routeHistory,setRouteHistory] = useState([])
+    const [routeDetails,setRouteDetails] = useState([])
     
-    GetRouteHistory(setResults)
+    GetRouteHistory(setRouteHistory)
 
+
+    // Alert.alert(JSON.stringify(x))
     return(
         <ScrollView>
             {
-                results.map((x,i)=>(
+                routeHistory.map((x,i)=>(
                     <ListItem
-                        key={x.id}
-                        title={x.name}
-                        subtitle={x.age}
+                        key={x.routeKey}
+                        title={x.createdDate}
+                        subtitle={x.city}
                         bottomDivider
                         onPress={()=>DisplayRouteDetails(x, navigation)}
                     />
@@ -42,6 +45,8 @@ export default function RouteHistoryScreen({navigation}){
 //     })
 // }
 function DisplayRouteDetails(data, navigation){
+    // let d = GetRouteDetailsById(data.routeKey, callback)
+    // Alert.alert(routeDetails)
     navigation.navigate("RouteDetails", {results: data})
 }
 

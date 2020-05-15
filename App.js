@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Alert } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,11 +10,18 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 import RouteDetailsScreen from './screens/RouteDetailsScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import { InitializeDatabase, InsertDefaultData } from "./services/DbService";
+import { GetDefaultData, SetDefaultData, SetDefaultRouteHistoryData, GetRouteHistory, SetDefaultRouteDetailsData } from "./services/storage";
 Icon.loadFont();
+// SetDefaultRouteDetailsData()
+// SetDefaultData()
+// GetDefaultData()
+// SetDefaultRouteHistoryData()
+//  GetRouteHistory()
 
 const Stack = createStackNavigator();
-
+// InitializeDatabase()
+// InsertDefaultData()
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();

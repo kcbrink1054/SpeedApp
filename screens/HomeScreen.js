@@ -4,7 +4,7 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, Aler
 import { ScrollView } from 'react-native-gesture-handler';
 
 import GraphComponent from "../components/GraphComponent";
-import { MonoText } from '../components/StyledText';
+import { MonoText, RobotoText } from '../components/StyledText';
 import {GetAlert} from "../services/DbService";
 import { SaveChanges } from "../services/DbService";
 import moment from "moment";
@@ -48,9 +48,13 @@ export default class HomeScreen extends React.Component {
   render(){
     return (
       <View style={styles.container}>
-        <View style={styles.twoFlexContainer}><Text>
+        <View style={styles.twoFlexContainer}>
+          <Text>
           {JSON.stringify(GetLatestRouteData(this.state.routeDetails))}
         </Text>
+        {/* <Text>Test</Text>
+        <MonoText>Test</MonoText>
+        <RobotoText>Test</RobotoText> */}
           <GraphComponent data={GetLatestRouteData(this.state.routeDetails)}/>
         </View>
         <View style={styles.oneFlexContainer}> 
